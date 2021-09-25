@@ -1,0 +1,6 @@
+FROM openjdk:8-jre-alpine
+LABEL maintainer="manuel.escarate.inf@gmail.com"
+COPY Clientes-0.0.1-SNAPSHOT.jar /opt/lib/clientes.jar
+COPY clientes-entrypoint.sh /opt/bin/clientes-entrypoint.sh 
+RUN chmod 755 /opt/bin/clientes-entrypoint.sh
+CMD ["sh", "/opt/bin/clientes-entrypoint.sh"]  

@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db_clientes'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_ROOT_PASSWORD: 'test'
+    ports:
+      - "3306:3306"
+    networks:
+      - bbdd
+    volumes:
+      - my-db:/var/lib/mysql
+  clientes:
+    profiles: [dev]
+    build:
+       context: ./
+       dockerfile: ./Dockerfile-Cliente
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysqldb:3306/db_clientes?allowPublicKeyRetrieval=true&useSSL=false'
+      SPRING_DATASOURCE_USERNAME: 'test'
+      SPRING_DATASOURCE_PASSWORD: 'test'
+    restart: always
+    ports:
+      - "8080:8080"
+    entrypoint: /opt/bin/clientes-entrypoint.sh
+    networks:
+      - bbdd
+    depends_on:
+      - mysqldb
+ 
+
+ 
+volumes:
+  my-db:
+networks:
+  bbdd:
